@@ -14,8 +14,8 @@ const config: Config = {
           secondary: "#64748B",
         },
         accent: {
-          DEFAULT: "#4F46E5",
-          light: "#EEF2FF",
+          DEFAULT: "#C20833",
+          light: "#FEE2E2",
         },
         priority: {
           low: "#10B981",

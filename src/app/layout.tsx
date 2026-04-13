@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist, Inter } from "next/font/google";
+import { Inter, Rubik } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const geist = Geist({
+const rubik = Rubik({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-rubik",
 });
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={cn(geist.variable, "font-sans", inter.variable)}>
+    <html lang="en" className={cn("font-sans", inter.variable, rubik.variable)}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
