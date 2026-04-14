@@ -1,9 +1,39 @@
+'use client'
+
+import { useState } from "react";
 import { Separator } from "~/components/ui/separator";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { register } from "~/server/actions/auth";
+
 
 export default function RegisterPage() {
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent){
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const result = await register(form);
+
+    if(result?.error){
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+  }
   return (
     <div className="bg-background min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-md bg-card py-6 rounded-md shadow-sm">
@@ -21,7 +51,7 @@ export default function RegisterPage() {
           </span>
         </section>
         <section className="w-full max-w-md flex flex-col">
-          <form className="flex flex-col gap-12 p-10">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             <div className="space-y-6">
               <div className="flex flex-col gap-2">
                 <label className="font-inter text-sm text-primary">Full Name</label>
@@ -29,6 +59,7 @@ export default function RegisterPage() {
                   type="text"
                   placeholder="John Doe"
                   className="w-full rounded-sm pl-4 focus:pl-8 pr-4 py-3 bg-accent-light text-sm transition-all duration-200"
+                  onChange={(e) => setForm({...form, fullName: e.target.value})}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -41,6 +72,7 @@ export default function RegisterPage() {
                     type="email"
                     placeholder="john.doe@example.com"
                     className="w-full rounded-sm pl-8 focus:pl-10 pr-4 py-3 bg-accent-light text-sm transition-all duration-200"
+                    onChange={(e) => setForm({...form, email: e.target.value})}
                   />
                 </div>
               </div>
@@ -52,6 +84,7 @@ export default function RegisterPage() {
                     type="password"
                     placeholder="••••••••"
                     className="w-full rounded-sm pl-8 focus:pl-10 pr-4 py-3 bg-accent-light text-sm transition-all duration-200"
+                    onChange={(e) => setForm({...form, password: e.target.value})}
                   />
                 </div>
               </div>
@@ -63,13 +96,20 @@ export default function RegisterPage() {
                     type="password"
                     placeholder="••••••••"
                     className="w-full rounded-sm pl-8 focus:pl-10 pr-4 py-3 bg-accent-light text-sm transition-all duration-200"
+                    onChange={(e) => setForm({...form, confirmPassword: e.target.value})}
                   />
                 </div>
               </div>
             </div>
+            {error && (
+              <p className="text-priority-high text-sm text-center">{error}</p>
+            )}
             <div>
-              <button className="w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer">
-                Create Account <ArrowRight className="inline w-5 h-5 ml-1" />
+              <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer">
+                {loading ? "Creating account..." : "Create Account"} <ArrowRight className="inline w-5 h-5 ml-1" />
               </button>
             </div>
           </form>
