@@ -5,6 +5,7 @@ import { Inter, Rubik } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import Providers from "~/components/Providers";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", inter.variable, rubik.variable)}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Providers>{children}</Providers>
+        </TRPCReactProvider>
       </body>
     </html>
   );

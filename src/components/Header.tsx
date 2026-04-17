@@ -5,10 +5,13 @@ import Link from "next/link";
 import { Separator } from "~/components/ui/separator";
 import EditProfileModal from "./EditProfileModal";
 import { SquareArrowRightExit } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { data: session } = useSession();
+  const userName = session?.user?.name;
+  const initials = (userName?.[0] || "") + (userName?.split(" ").pop()?.[0] || "");
   
   const handleLogOut = async () => {
     await signOut()   
@@ -24,7 +27,7 @@ export default function Header() {
       </Link>
       <div className="flex items-center gap-4">
         <span className="font-inter font-base text-sm tracking-tight">
-          Romy Valdez
+          {userName}
         </span>
         <Separator orientation="vertical" className="h-8" />
         <span className="flex items-center gap-3">
@@ -34,7 +37,7 @@ export default function Header() {
             }}
             className="bg-accent-light hover:bg-accent hover:text-white px-2 py-1.5 rounded-full text-center text-accent transition-all cursor-pointer"
           >
-            RV
+            {initials}
           </button>
           <button onClick={handleLogOut} className="cursor-pointer">
             <SquareArrowRightExit className="scale-80 text-primary-secondary hover:text-accent transition-all"/>
