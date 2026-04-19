@@ -9,7 +9,7 @@ export default function Dashboard() {
       <section className="flex justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="font-rubik font-bold text-3xl">My Boards</h1>
-          <p className="text-primary-secondary">
+          <p className="font-inter font-normal text-md text-primary-secondary">
             Manage your projects and track team progress across all workstreams.
           </p>
         </div>
@@ -20,7 +20,7 @@ export default function Dashboard() {
       </section>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-card flex flex-col gap-6 p-5 rounded-lg borber border-l-4 border-accent">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             <div className="flex justify-between gap-4">
               <h2 className="font-inter font-bold text-xl text-primary">
                 Marketing Q2
@@ -37,7 +37,7 @@ export default function Dashboard() {
             Created 2 days ago
           </span>
         </div>
-        <div className="flex flex-col justify-center items-center gap-3 border border-dashed border-primary-secondary rounded-lg hover:**:text-primary hover:bg-primary-secondary/10 hover:border-none hover:shadow-md transition-all cursor-pointer">
+        <div className="flex flex-col justify-center items-center gap-3 border border-dashed border-primary-secondary rounded-lg hover:border-solid hover:shadow-md transition-all cursor-pointer">
           <Plus className="w-10 h-10 p-2 bg-accent rounded-sm text-primary-secondary"/>
           <span className="font-inter font-medium text-sm text-primary-secondary">Create a New Board</span>
         </div>
