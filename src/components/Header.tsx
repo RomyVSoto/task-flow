@@ -20,12 +20,11 @@ export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
   const { data: session } = useSession();
   const userName = session?.user?.name;
+  const nameParts = userName?.split(" ") ?? [];
   const initials =
-    (userName?.[0] || "") + (userName?.split(" ").pop()?.[0] || "");
-
-  const handleLogOut = async () => {
-    await signOut();
-  };
+    nameParts.length >= 2
+      ? (nameParts[0]?.[0] ?? "") + (nameParts[nameParts.length - 1]?.[0] ?? "")
+      : (nameParts[0]?.[0] ?? "");
 
   return (
     <header className="bg-background flex items-center justify-between py-4 px-6 shadow-sm">
@@ -58,7 +57,7 @@ export default function Header() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={handleLogOut}
+                onClick={() => signOut({ callbackUrl: "/" })}
                 className="w-full flex items-center justify-between gap-2 font-inter font-light text-xs focus:bg-accent-light focus:text-primary"
               >
                 Logout

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Sheet,
   SheetClose,
@@ -12,13 +11,23 @@ import {
 import { Label } from "~/components/ui/label"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
+import { useSession } from "next-auth/react"
 
 interface EditProfileModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  userName?: string;
 }
 
 export default function EditProfileModal({ isOpen, onOpenChange }: EditProfileModalProps) {
+  const { data: session } = useSession();
+  const userName = session?.user?.name;
+
+  const nameParts = userName?.split(" ") ?? [];
+  const initials =
+    nameParts.length >= 2
+      ? (nameParts[0]?.[0] ?? "") + (nameParts[nameParts.length - 1]?.[0] ?? "")
+      : (nameParts[0]?.[0] ?? "");
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetTrigger>Open</SheetTrigger>
@@ -30,13 +39,18 @@ export default function EditProfileModal({ isOpen, onOpenChange }: EditProfileMo
           </SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
-          <div className="grid gap-3">
-            <Label htmlFor="name">Full Name</Label>
-            <Input id="name" value="Pedro Duarte" />
+          <div className="flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-accent-light flex items-center justify-center">
+              <span className="font-rubik font-semibold text-2xl text-accent">{initials}</span>
+            </div>
           </div>
           <div className="grid gap-3">
-            <Label htmlFor="username">Username</Label>
-            <Input id="username" value="@peduarte" />
+            <Label htmlFor="photo">Photo</Label>
+            <Input id="photo" type="file" />
+          </div>
+          <div className="grid gap-3">
+            <Label htmlFor="name">Full Name</Label>
+            <Input id="name" value={userName || ""} />
           </div>
         </div>
         <SheetFooter>
