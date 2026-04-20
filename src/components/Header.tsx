@@ -42,9 +42,9 @@ export default function Header() {
         <span className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <button className="bg-accent-light hover:bg-accent hover:text-white px-2 py-1.5 rounded-full text-center text-accent transition-all cursor-pointer">
+              <span className="bg-accent-light hover:bg-accent hover:text-white px-2 py-1.5 rounded-full text-center text-accent transition-all cursor-pointer">
                 {initials}
-              </button>
+              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
