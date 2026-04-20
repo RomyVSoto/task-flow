@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -5,7 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import React from "react";
+import React, { useState } from "react";
+import { api } from "~/trpc/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface CreateBoardModalProps {
   isOpen: boolean;
@@ -16,6 +21,20 @@ export default function CreateBoardModal({
   isOpen,
   onClose,
 }: CreateBoardModalProps) {
+  const router = useRouter();
+  const [form, setForm] = useState({
+    name: "",
+  })
+
+const utils = api.useUtils();
+const { mutate: createBoard, isPending } =api.board.create.useMutation({
+  onSuccess: () => {
+    utils.board.getAll.invalidate();
+    router.refresh();
+    onClose()
+  }
+})
+
   if (!isOpen) return null;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -38,6 +57,8 @@ export default function CreateBoardModal({
               <input
                 type="text"
                 placeholder="e.g. Marketing Q2"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="font-inter bg-accent-light text-sm text-primary-secondary px-2 py-3 rounded-md focus:outline-none focus:text-primary focus:ring-1 focus:ring-accent"
               />
             </div>
@@ -53,6 +74,7 @@ export default function CreateBoardModal({
               <button
                 type="submit"
                 className="w-full font-inter font-medium text-sm text-white bg-accent rounded-md px-10 py-3 shadow-lg shadow-accent/30 hover:shadow-accent/50 hover:bg-accent-hover transition-all cursor-pointer"
+                onClick={() => createBoard({name: form.name})}
               >
                 Create Board
               </button>

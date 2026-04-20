@@ -50,11 +50,13 @@ export default function DashboardClient({ boards }: Props) {
           </div>
           <Separator />
           <span className="font-inter font-normal text-sm text-primary-secondary">
-            Created 2 days ago
+            Created {board.createdAt.toLocaleDateString()}
           </span>
           </div>
         ))}
-        <div className="flex flex-col justify-center items-center gap-3 border border-dashed border-primary-secondary rounded-lg hover:border-solid hover:shadow-md transition-all cursor-pointer">
+        <div 
+        onClick={() => setIsCreateBoardModalOpen(true)}
+        className="flex flex-col justify-center items-center gap-4 border border-dashed border-primary-secondary rounded-lg hover:border-solid hover:shadow-md transition-all cursor-pointer">
           <Plus className="w-10 h-10 p-2 bg-accent rounded-sm text-primary-secondary"/>
           <span className="font-inter font-medium text-sm text-primary-secondary">Create a New Board</span>
         </div>
