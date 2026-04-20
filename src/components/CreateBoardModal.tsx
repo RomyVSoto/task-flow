@@ -9,7 +9,6 @@ import {
 } from "~/components/ui/dialog";
 import React, { useState } from "react";
 import { api } from "~/trpc/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 interface CreateBoardModalProps {
@@ -27,7 +26,7 @@ export default function CreateBoardModal({
   })
 
 const utils = api.useUtils();
-const { mutate: createBoard, isPending } =api.board.create.useMutation({
+const { mutate: createBoard, isPending } = api.board.create.useMutation({
   onSuccess: () => {
     utils.board.getAll.invalidate();
     router.refresh();
