@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Separator } from "~/components/ui/separator";
-import EditProfileModal from "./EditProfileModal";
-import { SquareArrowRightExit } from "lucide-react";
+import EditProfileModal from "./modals/EditProfileModal";
+import { MoveLeft, SquareArrowRightExit } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
@@ -18,6 +18,10 @@ import {
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const boardPath = pathname.startsWith("/board") ? pathname.replace("/board/", "") : null;
+
   const { data: session } = useSession();
   const userName = session?.user?.name;
   const nameParts = userName?.split(" ") ?? [];
@@ -34,6 +38,16 @@ export default function Header() {
       >
         TaskFlow
       </Link>
+      {boardPath && (
+        <div className="flex items-center gap-2">
+          <Link href="/">
+            <MoveLeft className="scale-90" />
+          </Link>
+          <span className="font-inter font-semibold text-lg text-accent tracking-tight">
+            Board Name
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-4">
         <span className="font-inter font-base text-sm tracking-tight">
           {userName}

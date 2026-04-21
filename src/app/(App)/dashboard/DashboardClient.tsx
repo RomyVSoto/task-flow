@@ -6,7 +6,7 @@ import { Plus, EllipsisVertical, ClipboardList } from "lucide-react";
 import { Separator } from "~/components/ui/separator";
 import type { RouterOutputs } from "~/trpc/react";
 import { api } from "~/trpc/react";
-import CreateBoardModal from "~/components/CreateBoardModal";
+import CreateBoardModal from "~/components/modals/CreateBoardModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -86,13 +86,13 @@ export default function DashboardClient({ boards }: Props) {
                       <EllipsisVertical className="hover:text-accent transition-colors" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-card rounded-lg border">
-                      <DropdownMenuItem className="rounded-lg font-inter font-base text-sm text-primary flex justify-center items-center focus:bg-accent-light focus:text-primary py-2 cursor-pointer">
+                      <DropdownMenuItem className="rounded-lg font-inter font-base text-sm text-primary-secondary flex justify-center items-center focus:bg-accent-light focus:text-primary py-2 px-5 cursor-pointer">
                         Details
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button className="bg-card text-primary hover:bg-accent-light border-0 shadow-none">
+                          <Button className="bg-card text-primary hover:bg-accent-light border-0 shadow-none px-6">
                             Delete
                           </Button>
                         </AlertDialogTrigger>
@@ -140,7 +140,7 @@ export default function DashboardClient({ boards }: Props) {
         })}
         <div
           onClick={() => setIsCreateBoardModalOpen(true)}
-          className="flex flex-col justify-center items-center gap-4 p-8 border border-dashed border-primary-secondary rounded-lg hover:border-solid hover:shadow-md transition-all cursor-pointer"
+          className="flex flex-col justify-center items-center gap-4 p-10 border border-dashed border-primary-secondary rounded-lg hover:border-solid hover:shadow-md transition-all cursor-pointer"
         >
           <Plus className="w-10 h-10 p-2 bg-accent rounded-sm text-white" />
           <span className="font-inter font-medium text-sm text-primary">
