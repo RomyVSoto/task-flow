@@ -19,6 +19,17 @@ export const boardRouter = createTRPCRouter({
     });
   }),
 
+  getById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.board.findUnique({
+        where: { id: input.id, userId: ctx.session.user.id },
+        include: {
+          columns: { orderBy: { order: "asc" } },
+        },
+      });
+    }),
+
   create: protectedProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -38,8 +49,8 @@ export const boardRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure
-  .input(z.object({ id: z.string()}))
-  .mutation(async({ctx, input}) => {
-    return ctx.db.board.delete({where: {id: input.id}})
-  })
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.board.delete({ where: { id: input.id } });
+    }),
 });

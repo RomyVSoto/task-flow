@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns"
 import { Button } from "~/components/ui/button"
 import { Calendar } from "~/components/ui/calendar"
-import { Field, FieldLabel } from "~/components/ui/field"
+import { Field } from "~/components/ui/field"
 import {
   Popover,
   PopoverContent,
@@ -28,12 +28,16 @@ interface CreateTaskModalProps {
 export default function CreateTaskModal({
   isOpen,
   onClose,
-}: CreateTaskModalProps) {
+  boardId,
+  columnId,
+}: CreateTaskModalProps & { boardId: string; columnId: string }) {
   const router = useRouter();
-  const [date, setDate] = useState<Date | undefined>(undefined);
   const [priority, setPriority] = useState<"low" | "medium" | "high">("low");
   const [form, setForm] = useState({
     name: "",
+    description: "",
+    priority: priority,
+    dueDate: undefined as Date | undefined,
   });
 
   const { mutate: createTask, isPending } = api.task.create.useMutation({
@@ -69,6 +73,7 @@ export default function CreateTaskModal({
                 type="text"
                 placeholder="What need to be done?"
                 className="font-inter bg-primary-secondary/10 text-sm text-primary-secondary px-2 py-3 rounded-xs focus:outline-none focus:text-primary focus:ring-1 focus:ring-accent"
+                onChange={(e) => setForm({...form, name: e.target.value})}
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -79,6 +84,7 @@ export default function CreateTaskModal({
                 type="text"
                 placeholder="Add a description..."
                 className="font-inter bg-primary-secondary/10 text-sm text-primary-secondary px-2 py-3 rounded-xs focus:outline-none focus:text-primary focus:ring-1 focus:ring-accent"
+              onChange={(e) => setForm({...form, description: e.target.value})}
               />
             </div>
 
@@ -91,7 +97,7 @@ export default function CreateTaskModal({
                   <button
                     key={p}
                     type="button"
-                    onClick={() => setPriority(p)}
+                    onClick={() => {setPriority(p); setForm({...form, priority: p})}}
                     className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xs border text-sm font-inter font-medium transition-all cursor-pointer ${
                       priority === p
                         ? "bg-accent border-accent text-white"
@@ -121,15 +127,15 @@ export default function CreateTaskModal({
                       id="date-picker-simple"
                       className="hover:bg-primary-secondary/20 py-5 rounded-xs bg-primary-secondary/10"
                     >
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      {form.dueDate ? format(form.dueDate, "PPP") : <span>Pick a date</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="p-0" style={{ width: "var(--radix-popover-trigger-width)" }} align="center">
                     <Calendar
                       mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      defaultMonth={date}
+                      selected={form.dueDate}
+                      onSelect={(date) => setForm({ ...form, dueDate: date ?? new Date() })}
+                      defaultMonth={form.dueDate}
                       className="w-full [--cell-size:--spacing(6)] md:[--cell-size:--spacing(8)]"
                     />
                   </PopoverContent>
@@ -148,6 +154,7 @@ export default function CreateTaskModal({
               <button
                 type="submit"
                 className="w-full font-inter font-medium text-sm text-white bg-accent rounded-sm px-10 py-3 shadow-lg shadow-accent/30 hover:shadow-accent/50 hover:bg-accent-hover transition-all cursor-pointer"
+              onClick={() => createTask({ name: form.name, description: form.description, priority: form.priority, dueDate: form.dueDate, boardId: boardId, columnId: columnId })}
               >
                 Create Task
               </button>

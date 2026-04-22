@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Separator } from "~/components/ui/separator";
 import EditProfileModal from "./modals/EditProfileModal";
-import { MoveLeft, SquareArrowRightExit } from "lucide-react";
+import { ArrowLeft, SquareArrowRightExit } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
@@ -15,12 +15,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { usePathname, useParams } from "next/navigation";
+import { api } from "~/trpc/react";
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
 
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-  const boardPath = pathname.startsWith("/board") ? pathname.replace("/board/", "") : null;
+  const boards = api.board.getAll.useQuery().data;
+
+  const pathname = usePathname();
+  const params = useParams();
+  const boardPath = pathname.startsWith("/board/");
+  const boardName = boards?.find((board) => board.id === params.id)?.name;
 
   const { data: session } = useSession();
   const userName = session?.user?.name;
@@ -40,11 +46,11 @@ export default function Header() {
       </Link>
       {boardPath && (
         <div className="flex items-center gap-2">
-          <Link href="/">
-            <MoveLeft className="scale-90" />
+          <Link href="/" className="hover:scale-120 transition-all cursor-pointer">
+            <ArrowLeft className="scale-90" />
           </Link>
           <span className="font-inter font-semibold text-lg text-accent tracking-tight">
-            Board Name
+            {boardName}
           </span>
         </div>
       )}
