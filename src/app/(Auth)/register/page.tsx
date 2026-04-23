@@ -6,6 +6,7 @@ import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { register } from "~/server/actions/auth";
+import { Spinner } from "~/components/ui/spinner";
 
 
 export default function RegisterPage() {
@@ -108,8 +109,18 @@ export default function RegisterPage() {
               <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer">
-                {loading ? "Creating account..." : "Create Account"} <ArrowRight className="inline w-5 h-5 ml-1" />
+              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer">
+                {loading ? (
+                  <>
+                    <Spinner />
+                    Creating account...
+                  </>
+                ) : (
+                  <>
+                    Create Account
+                    <ArrowRight className="inline w-5 h-5 ml-1" />
+                  </>
+                )}
               </button>
             </div>
           </form>

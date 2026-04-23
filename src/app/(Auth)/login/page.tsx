@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { set } from "zod";
+import { Spinner } from "~/components/ui/spinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -91,10 +92,19 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              className="w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer"
+              className="flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-sm hover:cursor-pointer"
             >
-              {loading ? "Signing in..." : "Sign In"}{" "}
-              <ArrowRight className="inline w-5 h-5 ml-1" />
+              {loading ? (
+                <>
+                  <Spinner />
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="inline w-5 h-5 ml-1" />
+                </>
+              )}
             </button>
           </div>
         </form>

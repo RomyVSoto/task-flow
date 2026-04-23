@@ -6,7 +6,7 @@ import { hash, compare } from "bcryptjs";
 import { redirect } from "next/navigation";
 
 
-export async function register(data: {fullName: string, email: string, password: string, confirmPassword: string}){
+export async function register(data: {fullName: string, email: string, password: string, confirmPassword: string, image?: string}){
     const validateSchema = z.object({
         fullName: z.string().min(1, "Name is required"),
         email: z.string().email("Invalid email."),
@@ -40,7 +40,7 @@ export async function register(data: {fullName: string, email: string, password:
             fullName: data.fullName,
             email: data.email,
             password: hashedPassword,
-            image: null
+            image: data.image || null
         }
     })
 

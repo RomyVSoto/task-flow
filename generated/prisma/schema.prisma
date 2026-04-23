@@ -81,7 +81,7 @@ model Column {
   name      String
   order     Int
   boardId   String
-  board     Board    @relation(fields: [boardId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   tasks     Task[]
   createdAt DateTime @default(now())
 }
@@ -96,6 +96,6 @@ model Task {
   boardId     String
   columnId    String
   createdBy   String
-  column      Column    @relation(fields: [columnId], references: [id])
+  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
 }

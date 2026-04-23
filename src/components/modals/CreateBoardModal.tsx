@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "../ui/spinner";
 
 interface CreateBoardModalProps {
   isOpen: boolean;
@@ -75,7 +76,7 @@ const { mutate: createBoard, isPending } = api.board.create.useMutation({
                 className="w-full font-inter font-medium text-sm text-white bg-accent rounded-md px-10 py-3 shadow-lg shadow-accent/30 hover:shadow-accent/50 hover:bg-accent-hover transition-all cursor-pointer"
                 onClick={() => createBoard({name: form.name})}
               >
-                Create Board
+                {isPending ? (<span className="flex items-center gap-2"><Spinner/>Creating...</span>) : "Create Board"}
               </button>
             </div>
           </form>
