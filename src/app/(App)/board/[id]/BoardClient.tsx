@@ -43,7 +43,7 @@ function DroppableColumn({
       <div className="flex justify-between items-center">
         <span className="flex gap-2 items-center font-inter font-semibold text-md text-primary">
           {column.name}
-          <p className="bg-accent-light font-inter font-normal text-sm px-2 rounded-md">
+          <p className={`font-inter font-normal text-xs px-2 rounded-sm ${column.name === "To Do" ? 'bg-priority-high' : column.name === "In Progress" ? 'bg-priority-medium' : column.name === "Done" ? 'bg-priority-low' : 'bg-accent-light'}`}>
             {tasks.length}
           </p>
         </span>
@@ -62,7 +62,7 @@ function DroppableColumn({
             strategy={verticalListSortingStrategy}
           >
             {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard key={task.id} task={task} columnName={column.name} />
             ))}
           </SortableContext>
         </div>

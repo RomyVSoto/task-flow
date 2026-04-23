@@ -45,10 +45,6 @@ export default function EditProfileModal({ isOpen, onOpenChange }: EditProfileMo
             </div>
           </div>
           <div className="grid gap-3">
-            <Label htmlFor="photo">Photo</Label>
-            <Input id="photo" type="file" />
-          </div>
-          <div className="grid gap-3">
             <Label htmlFor="name">Full Name</Label>
             <Input id="name" value={userName || ""} />
           </div>

@@ -84,7 +84,7 @@ export default function CreateTaskModal({
                 type="text"
                 placeholder="Add a description..."
                 className="font-inter bg-primary-secondary/10 text-sm text-primary-secondary px-2 py-3 rounded-xs focus:outline-none focus:text-primary focus:ring-1 focus:ring-accent"
-              onChange={(e) => setForm({...form, description: e.target.value})}
+                onChange={(e) => setForm({...form, description: e.target.value})}
               />
             </div>
 

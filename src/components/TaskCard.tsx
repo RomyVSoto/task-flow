@@ -30,11 +30,19 @@ import { useRouter } from "next/navigation";
 import EditTaskModal from "./modals/EditTaskModal";
 type Task = RouterOutputs["task"]["getByBoard"][number];
 
-export default function TaskCard({ task }: { task: Task }) {
+export default function TaskCard({
+  task,
+  columnName,
+}: {
+  task: Task;
+  columnName: string;
+}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: task.id });
   const router = useRouter();
+
+  const isDone = columnName === "Done";
 
   const { mutate: deleteTask } = api.task.delete.useMutation({
     onSuccess: () => {
@@ -47,9 +55,14 @@ export default function TaskCard({ task }: { task: Task }) {
     transition,
   };
 
+  const isOverdue =
+    !isDone && task.dueDate != null && new Date(task.dueDate) < new Date();
+
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
-      <div className="bg-card w-full flex flex-col gap-6 p-4 rounded-md">
+      <div
+        className={`${isDone ? "opacity-75" : ""} bg-card w-full flex flex-col gap-6 p-4 rounded-md`}
+      >
         <div className="space-y-2">
           <span className="flex justify-between items-center text-primary-secondary">
             <GripVertical
@@ -116,10 +129,14 @@ export default function TaskCard({ task }: { task: Task }) {
             }}
           />
           <div className="flex flex-col">
-            <span className="font-rubik font-medium text-lg text-primary">
+            <span
+              className={`${isDone ? "line-through" : ""} font-rubik font-medium text-lg text-primary`}
+            >
               {task.name}
             </span>
-            <span className="font-inter font-normal text-xs text-primary-secondary">
+            <span
+              className={`${isDone ? "line-through" : ""} font-inter font-normal text-xs text-primary-secondary`}
+            >
               {task.description}
             </span>
           </div>
@@ -136,11 +153,20 @@ export default function TaskCard({ task }: { task: Task }) {
           >
             {task.priority.toUpperCase()}
           </span>
-          <span className="flex gap-1 items-center font-inter font-medium text-xs text-primary-secondary">
+          <span
+            className={`flex gap-1 items-center font-inter font-medium text-xs ${
+              isOverdue ? "" : "text-primary-secondary"
+            } ${isDone ? "line-through" : ""}`}
+          >
             <Calendar className="w-4 h-4" />
             {task.dueDate
               ? new Date(task.dueDate).toLocaleDateString()
               : "No date"}
+            {isOverdue && (
+              <span className="text-md text-priority-high px-1 border-priority-high border rounded-xs">
+                Overdue
+              </span>
+            )}
           </span>
         </div>
       </div>
