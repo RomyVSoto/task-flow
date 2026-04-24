@@ -1,29 +1,56 @@
-# Create T3 App
+# TaskFlow
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A full-stack Kanban board for organizing tasks across projects. Create boards, add tasks with priorities and due dates, and drag them between columns seamlessly.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- Authentication with NextAuth — register, login, JWT sessions
+- Protected routes with Next.js middleware
+- Create and manage multiple Kanban boards
+- Tasks with title, description, priority and due date
+- Drag and drop between columns powered by dnd-kit
+- Edit profile with real-time session update
+- Skeleton loaders and loading states
+- Responsive design
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL (Neon) + Prisma ORM
+- **API:** tRPC — end-to-end typesafe API
+- **Auth:** NextAuth.js with Credentials provider
+- **Styling:** TailwindCSS + Shadcn UI
+- **Drag and Drop:** dnd-kit
+- **Validation:** Zod
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+1. Clone the repository
+```bash
+   git clone https://github.com/RomyVSoto/task-flow.git
+   cd task-flow
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+2. Install dependencies
+```bash
+   npm install
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+3. Create a `.env` file
 
-## How do I deploy this?
+```
+DATABASE_URL=your_postgresql_url
+NEXTAUTH_SECRET=your_secret
+NEXTAUTH_URL=http://localhost:3000
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+4. Push the schema to your database
+```bash
+   npx prisma db push
+```
+
+5. Run the development server
+```bash
+   npm run dev
+```
