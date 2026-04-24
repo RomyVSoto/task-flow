@@ -32,10 +32,10 @@ type Task = RouterOutputs["task"]["getByBoard"][number];
 
 export default function TaskCard({
   task,
-  columnName,
+  columnName = "",
 }: {
   task: Task;
-  columnName: string;
+  columnName?: string; // opcional con ?
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =

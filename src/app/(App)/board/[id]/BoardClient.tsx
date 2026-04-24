@@ -74,9 +74,7 @@ function DroppableColumn({
 export default function BoardClient({ board, tasks: initialTasks }: Props) {
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null);
   const [tasks, setTasks] = useState(initialTasks);
-  const [activeTask, setActiveTask] = useState<
-    RouterOutputs["task"]["getByBoard"] | null
-  >(null);
+  const [activeTask, setActiveTask] = useState<RouterOutputs["task"]["getByBoard"][number] | null>(null);
   const router = useRouter();
 
   const { mutate: updateOrder } = api.task.updateOrder.useMutation({
