@@ -47,14 +47,21 @@ export const authConfig = {
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
+  jwt: ({ token, trigger, session }) => {
+    if (trigger === "update" && session?.name) {
+      token.name = session.name
+    }
+    return token
   },
+  session: ({ session, token }) => ({
+    ...session,
+    user: {
+      ...session.user,
+      id: token.sub,
+      name: token.name,
+    },
+  }),
+},
   pages: {
     signIn: "/login",
   },

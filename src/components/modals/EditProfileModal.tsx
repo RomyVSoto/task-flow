@@ -21,7 +21,6 @@ import { Spinner } from "../ui/spinner";
 interface EditProfileModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  userName?: string;
 }
 
 export default function EditProfileModal({

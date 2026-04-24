@@ -9,14 +9,13 @@ import { signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { usePathname, useParams } from "next/navigation";
 import { api } from "~/trpc/react";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,7 +27,8 @@ export default function Header() {
   const boardPath = pathname.startsWith("/board/");
   const boardName = boards?.find((board) => board.id === params.id)?.name;
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isLoading = status === "loading";
   const userName = session?.user?.name;
   const nameParts = userName?.split(" ") ?? [];
   const initials =
@@ -46,7 +46,10 @@ export default function Header() {
       </Link>
       {boardPath && (
         <div className="flex items-center gap-2">
-          <Link href="/" className="hover:scale-120 transition-all cursor-pointer">
+          <Link
+            href="/"
+            className="hover:scale-120 transition-all cursor-pointer"
+          >
             <ArrowLeft className="scale-90" />
           </Link>
           <span className="font-inter font-semibold text-lg text-accent tracking-tight">
@@ -55,16 +58,24 @@ export default function Header() {
         </div>
       )}
       <div className="flex items-center gap-4">
-        <span className="font-inter font-base text-sm tracking-tight">
-          {userName}
-        </span>
+        {isLoading ? (
+          <Skeleton className="h-4 w-24" />
+        ) : (
+          <span className="font-inter font-base text-sm tracking-tight">
+            {userName}
+          </span>
+        )}
         <Separator orientation="vertical" className="h-8" />
         <span className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <span className="bg-accent-light hover:bg-accent hover:text-white px-2 py-1.5 rounded-full text-center text-accent transition-all cursor-pointer">
-                {initials}
-              </span>
+              {isLoading ? (
+                <Skeleton className="h-8 w-8 rounded-full bg-accent-light" />
+              ) : (
+                <span className="bg-accent-light hover:bg-accent hover:text-white px-1.5 py-1.5 rounded-full text-center text-accent transition-all cursor-pointer">
+                  {initials}
+                </span>
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem

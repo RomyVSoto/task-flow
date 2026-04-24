@@ -87,6 +87,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -165,6 +168,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -218,8 +226,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
-  "postinstall": false,
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -228,8 +235,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below\n  // Further reading:\n  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema\n  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string\n  url      = env(\"DATABASE_URL\")\n}\n\n// Necessary for Next auth\nmodel Account {\n  id                       String  @id @default(cuid())\n  userId                   String\n  type                     String\n  provider                 String\n  providerAccountId        String\n  refresh_token            String? // @db.Text\n  access_token             String? // @db.Text\n  expires_at               Int?\n  token_type               String?\n  scope                    String?\n  id_token                 String? // @db.Text\n  session_state            String?\n  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  refresh_token_expires_in Int?\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel User {\n  id            String    @id @default(cuid())\n  name          String?\n  email         String?   @unique\n  emailVerified DateTime?\n  image         String?\n  accounts      Account[]\n  sessions      Session[]\n  fullName      String\n  password      String\n  isActive      Boolean   @default(true)\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  boards        Board[]\n}\n\nmodel Board {\n  id        String   @id @default(cuid())\n  name      String\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  columns   Column[]\n  createdAt DateTime @default(now())\n}\n\nmodel Column {\n  id        String   @id @default(cuid())\n  name      String\n  order     Int\n  boardId   String\n  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)\n  tasks     Task[]\n  createdAt DateTime @default(now())\n}\n\nmodel Task {\n  id          String    @id @default(cuid())\n  name        String\n  description String?\n  priority    String    @default(\"low\")\n  dueDate     DateTime?\n  order       Int\n  boardId     String\n  columnId    String\n  createdBy   String\n  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)\n  createdAt   DateTime  @default(now())\n}\n",
-  "inlineSchemaHash": "fa0ba51ffc4a6397af5081faa2fdad0f8d77a0cdef2e5ac866aa98697c7e1aaa",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below\n  // Further reading:\n  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema\n  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string\n  url      = env(\"DATABASE_URL\")\n}\n\n// Necessary for Next auth\nmodel Account {\n  id                       String  @id @default(cuid())\n  userId                   String\n  type                     String\n  provider                 String\n  providerAccountId        String\n  refresh_token            String? // @db.Text\n  access_token             String? // @db.Text\n  expires_at               Int?\n  token_type               String?\n  scope                    String?\n  id_token                 String? // @db.Text\n  session_state            String?\n  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  refresh_token_expires_in Int?\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel User {\n  id            String    @id @default(cuid())\n  name          String?\n  email         String?   @unique\n  emailVerified DateTime?\n  image         String?\n  accounts      Account[]\n  sessions      Session[]\n  fullName      String\n  password      String\n  isActive      Boolean   @default(true)\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  boards        Board[]\n}\n\nmodel Board {\n  id        String   @id @default(cuid())\n  name      String\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  columns   Column[]\n  createdAt DateTime @default(now())\n}\n\nmodel Column {\n  id        String   @id @default(cuid())\n  name      String\n  order     Int\n  boardId   String\n  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)\n  tasks     Task[]\n  createdAt DateTime @default(now())\n}\n\nmodel Task {\n  id          String    @id @default(cuid())\n  name        String\n  description String?\n  priority    String    @default(\"low\")\n  dueDate     DateTime?\n  order       Int\n  boardId     String\n  columnId    String\n  createdBy   String\n  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)\n  createdAt   DateTime  @default(now())\n}\n",
+  "inlineSchemaHash": "7f785c61bedd860174c4869c4e9085d61b781a1eb41db01f55245fa672e3d2e4",
   "copyEngine": true
 }
 config.dirname = '/'
