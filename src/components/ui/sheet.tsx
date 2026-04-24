@@ -67,7 +67,7 @@ function SheetContent({
           <DialogPrimitive.Close asChild>
             <Button
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               data-slot="sheet-close"
               className="absolute top-4 right-4"
             >
